@@ -1,16 +1,18 @@
 "use strict";
 
 function shortenCode() {
-  let x = 100;
+  // let x = 100;
   const random = (
-    Math.ceil(Math.random() * 299) *
-    Math.ceil(Math.random() * 299) *
-    Math.ceil(Math.random() * 299)
+    Math.ceil(Math.random() * (299 - 100) + 100) *
+    Math.ceil(Math.random() * (299 - 100) + 100) *
+    Math.ceil(Math.random() * (299 - 100) + 100) *
+    Math.ceil(Math.random() * (299 - 100) + 100)
   ).toString(16);
-  return random + x++;
+  return random;
 }
 module.exports = { shortenCode };
 
+// console.log(shortenCode());
 // shorten("https://some-very-loooooong-url.com");
 
 //changes
@@ -18,3 +20,7 @@ module.exports = { shortenCode };
 //how should be the project structure ask from prem//-- convert this according to the project structure.
 //redirect to new window or url
 //integrate mongodb after all this stuff.
+
+// currently mera function writefile callback wala h lekin isko callback wala se hata ke promise me ya async await me convert karna h
+// controllers me logic nhi likhna h, controles sirf flow control kare ge,
+// business logic shuld be in services, like shorten karna url ko long urlget karna
