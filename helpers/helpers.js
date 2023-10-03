@@ -1,6 +1,6 @@
 "use strict";
 
-function shortenCode() {
+exports.shortenCode = () => {
   // let x = 100;
   const random = (
     Math.ceil(Math.random() * (299 - 100) + 100) *
@@ -9,9 +9,26 @@ function shortenCode() {
     Math.ceil(Math.random() * (299 - 100) + 100)
   ).toString(16);
   return random;
-}
-module.exports = { shortenCode };
+};
 
+exports.createNewUrlObj = (urlCode, longUrl) => {
+  return {
+    urlCode,
+    longUrl,
+    shortUrl: `http://localhost:3000/${urlCode}`,
+  };
+};
+
+exports.handleErrorResponse = (
+  res,
+  statusCode = 404,
+  errMsg = "something went wrong"
+) => {
+  res.status(statusCode).json({
+    status: `fail`,
+    message: errMsg,
+  });
+};
 // console.log(shortenCode());
 // shorten("https://some-very-loooooong-url.com");
 
