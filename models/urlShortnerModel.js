@@ -18,6 +18,6 @@ const urlSchema = new mongoose.Schema({
   },
 });
 
-const Url = mongoose.model("Url", urlSchema);
+const short_links = mongoose.model("short_links", urlSchema);
 
-module.exports = Url;
+module.exports = short_links;
