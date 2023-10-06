@@ -11,14 +11,6 @@ exports.shortenCode = () => {
   return random;
 };
 
-exports.createNewUrlObj = (urlCode, longUrl) => {
-  return {
-    urlCode,
-    longUrl,
-    shortUrl: `http://localhost:3000/${urlCode}`,
-  };
-};
-
 exports.handleErrorResponse = (
   res,
   statusCode = 404,
