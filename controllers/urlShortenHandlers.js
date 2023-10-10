@@ -1,42 +1,37 @@
 "use strict";
+const shortenUrlService = require(`${__dirname}/../services/urlShortnerServices.js`);
 
-const fs = require("fs"); // import the fs module
-const { shortenCode } = require(`${__dirname}/../helpers/codeGenerator`); // import the code generator
-const stringData = fs.readFileSync(`${__dirname}/../data/urls.json`, "utf8"); // store json data as string
-const parsedData = JSON.parse(stringData); // convert string data to object
-exports.shortenUrl = (req, res) => {
-  const { url } = req.body; // get the url from the request body
-  if (stringData.includes(url)) {
-    for (const index in parsedData) {
-      if (parsedData[index].longUrl === url) res.json(parsedData[index]);
-    }
-  } else {
-    const urlCode = shortenCode();
-    const newUrlObj = {
-      urlCode,
-      longUrl: url,
-      shortUrl: `http://localhost:3000/${urlCode}`,
-    };
-    parsedData.push(newUrlObj); // convert parsedData back to json String.
-    const updatedData = JSON.stringify(parsedData);
+const {
+  handleErrorResponse,
+  validUrl,
+} = require(`${__dirname}/../helpers/helpers.js`);
 
-    fs.writeFile("./newData.json", updatedData, "utf8", (err, data) => {
-      if (err) return err;
-      res.json({ message: "Data added to json", data: newUrlObj });
-      // res.send("Data added to json");
-      //In Express, we can only send one response to a single HTTP request
-    });
+exports.shortenUrlHandler = async (req, res) => {
+  try {
+    const longUrl = req.body.url; // get the longUrl from the request body
+    if (!longUrl || typeof longUrl !== "string")
+      return handleErrorResponse(res, 400, "Invalid longUrl");
+    if (!(await validUrl(longUrl)))
+      // if (!checkWebURL(longUrl))
+      return handleErrorResponse(res, 400, "Invalid URL");
+    const checkUrlInDb = await shortenUrlService.checkUrlExistsInDb(longUrl);
+    if (checkUrlInDb) return res.status(200).json(checkUrlInDb);
+
+    const newUrlObj = await shortenUrlService.shortenUrl(longUrl);
+    res.status(200).json(newUrlObj);
+  } catch (error) {
+    handleErrorResponse(res, error);
   }
 };
 
-exports.getLongUrl = (req, res) => {
-  const { urlCode } = req.params;
-  if (stringData.includes(urlCode)) {
-    for (const index in parsedData) {
-      if (parsedData[index].urlCode === urlCode)
-        res.redirect(parsedData[index].longUrl);
-    }
-  } else {
-    res.send("Invalid - urlCode!");
+exports.getLongUrlHandler = async (req, res) => {
+  try {
+    const { urlCode } = req.params;
+    const targetObj = await shortenUrlService.getLongUrl(urlCode);
+    // console.log(targetObj);
+    if (!targetObj) return handleErrorResponse(res, 400, "Invalid - urlCode!");
+    res.redirect(targetObj.longUrl);
+  } catch (error) {
+    res.status(404).json({ status: "fail", errorMessage: error.message });
   }
 };
