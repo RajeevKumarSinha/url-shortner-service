@@ -1,5 +1,7 @@
 "use strict";
 
+const axios = require("axios");
+
 exports.shortenCode = () => {
   // let x = 100;
   const random = (
@@ -21,15 +23,14 @@ exports.handleErrorResponse = (
     message: errMsg,
   });
 };
-// console.log(shortenCode());
-// shorten("https://some-very-loooooong-url.com");
 
-//changes
-//nesting- check false statements first
-//how should be the project structure ask from prem//-- convert this according to the project structure.
-//redirect to new window or url
-//integrate mongodb after all this stuff.
-
-// currently mera function writefile callback wala h lekin isko callback wala se hata ke promise me ya async await me convert karna h
-// controllers me logic nhi likhna h, controles sirf flow control kare ge,
-// business logic shuld be in services, like shorten karna url ko long urlget karna
+// check if given url exists or not exists on the web
+exports.validUrl = async (url) => {
+  try {
+    const { status } = await axios.get(url);
+    if ((status + "").match(/^2/)) return true;
+    return false;
+  } catch (error) {
+    return false;
+  }
+};

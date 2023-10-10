@@ -1,16 +1,17 @@
 "use strict";
-// const { checkWebURL } = require("node-uri");
 const shortenUrlService = require(`${__dirname}/../services/urlShortnerServices.js`);
-const validUrl = require("valid-url");
-// const validateUrl = require("url-exists-nodejs");
-const { handleErrorResponse } = require(`${__dirname}/../helpers/helpers.js`);
+
+const {
+  handleErrorResponse,
+  validUrl,
+} = require(`${__dirname}/../helpers/helpers.js`);
 
 exports.shortenUrlHandler = async (req, res) => {
   try {
     const longUrl = req.body.url; // get the longUrl from the request body
     if (!longUrl || typeof longUrl !== "string")
       return handleErrorResponse(res, 400, "Invalid longUrl");
-    if (!validUrl.isWebUri(longUrl))
+    if (!(await validUrl(longUrl)))
       // if (!checkWebURL(longUrl))
       return handleErrorResponse(res, 400, "Invalid URL");
     const checkUrlInDb = await shortenUrlService.checkUrlExistsInDb(longUrl);

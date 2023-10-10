@@ -35,3 +35,12 @@ mongoose
 // mongodb exercise till friday.❌
 // mongodb locally authentication enabled.✅
 // fs with promise in any file.// using fs.writeFile && fs.readFile.✅
+
+//rohan ke Question ka answer.✅
+// monogo, export,import,dump,restore --------------------------------
+// axios, use axios to get request to url and if we get 2xx as status then add it to db.✅
+
+//short_link.json using export
+// import restaurant.json data using import command in a new db called myTest
+// mongodump myTest.
+// deleted using mongosh myTest then restore using dumped myTest
