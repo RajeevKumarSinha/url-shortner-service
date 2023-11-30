@@ -1,21 +1,18 @@
 "use strict";
 
-<<<<<<< Updated upstream
-const router = require(`${__dirname}/routes/urlShortnerRoutes`);
-=======
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 dotenv.config({ path: `./config.env` });
 
 const urlShortnerRoutes = require(`${__dirname}/routes/urlShortnerRoutes`);
->>>>>>> Stashed changes
 const express = require("express"); // import express module
 const app = express(); //  call the express module
 
 app.use(express.json());
 
-app.use("/api/v1", router);
+// this process is called mounting the router on a new route
+app.use(urlShortnerRoutes); // mounting a new router "urlShortnerRoutes" as a middleware
 
 // const DATABASE = process.env.DATABASE.replace("<USER>", process.env.USER).replace("<PASSWORD>", process.env.PASSWORD);
 // const connectionString = `${DATABASE}/${process.env.DATABASE_NAME}`;
